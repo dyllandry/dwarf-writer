@@ -4,5 +4,11 @@
   "description": "Organize information during world building.",
   "main": "index.js",
   "author": "Dylan Landry",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "start": "electron index.js"
+  },
+  "dependencies": {
+    "electron": "^6.0.0"
+  }
 }
