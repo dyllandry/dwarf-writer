@@ -1,0 +1,8 @@
+{
+  "name": "dwarf-writer",
+  "version": "0.1.0",
+  "description": "Organize information during world building.",
+  "main": "index.js",
+  "author": "Dylan Landry",
+  "license": "MIT"
+}
