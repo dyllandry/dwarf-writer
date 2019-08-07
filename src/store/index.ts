@@ -1,5 +1,6 @@
 import entriesReducer from './entry/reducers'
-import { Map } from 'immutable'
+import localforage from 'localforage'
+import { Map, fromJS } from 'immutable'
 
 export const rootReducer = (state: Map<string, any> = Map(), action: any) => {
   return Map({
@@ -9,4 +10,14 @@ export const rootReducer = (state: Map<string, any> = Map(), action: any) => {
 
 export type AppState = ReturnType<typeof rootReducer>
 
-export type AppState = ReturnType <typeof rootReducer>
+export async function saveToPersistent (state: AppState) {
+  await localforage.setItem('state', state.toJS())
+}
+
+export async function loadFromPersistent (): Promise<AppState> {
+  return fromJS(await localforage.getItem('state')) || undefined
+}
+
+export async function clearPersistant (): Promise<void> {
+  await localforage.clear()
+}

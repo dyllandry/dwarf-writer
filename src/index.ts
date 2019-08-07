@@ -5,9 +5,8 @@
  */
 import { createStore, applyMiddleware } from 'redux'
 import { createLogger } from 'redux-logger'
-import logger from 'redux-logger'
-import { rootReducer } from './store'
-import { addEntry, deleteEntry } from './store/entry/actions'
+import { rootReducer, loadFromPersistent, saveToPersistent } from './store'
+import { addEntry } from './store/entry/actions'
 
 const loggerForImmutables = createLogger({
   stateTransformer: (state) => {
@@ -19,6 +18,7 @@ const loggerForImmutables = createLogger({
 
   const store = createStore(
     rootReducer,
+    await loadFromPersistent(),
     applyMiddleware(loggerForImmutables)
   )
 
@@ -34,6 +34,6 @@ const loggerForImmutables = createLogger({
   const randomId = Math.floor(Math.random()*1000).toString()
   store.dispatch(addEntry(randomId, entry))
 
-store.dispatch(addEntry('123', entry))
-store.dispatch(deleteEntry('123'))
+  const state = store.getState()
+  await saveToPersistent(state)
 })()
