@@ -4,23 +4,36 @@
  * index page.
  */
 import { createStore, applyMiddleware } from 'redux'
+import { createLogger } from 'redux-logger'
 import logger from 'redux-logger'
 import { rootReducer } from './store'
 import { addEntry, deleteEntry } from './store/entry/actions'
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(logger)
-)
+const loggerForImmutables = createLogger({
+  stateTransformer: (state) => {
+    return state.toJS()
+  }
+})
 
-const now = Date.now()
+;(async () => {
 
-const entry = {
-  name: 'Test Entry',
-  body: 'Test body.',
-  createdAt: now,
-  updatedAt: now
-}
+  const store = createStore(
+    rootReducer,
+    applyMiddleware(loggerForImmutables)
+  )
+
+  const now = Date.now()
+
+  const entry = {
+    name: 'Test Entry',
+    body: 'Test body.',
+    createdAt: now,
+    updatedAt: now
+  }
+
+  const randomId = Math.floor(Math.random()*1000).toString()
+  store.dispatch(addEntry(randomId, entry))
 
 store.dispatch(addEntry('123', entry))
 store.dispatch(deleteEntry('123'))
+})()

@@ -2,10 +2,13 @@ import {
   EntriesState,
   EntryActionTypes,
   ADD_ENTRY,
-  DELETE_ENTRY
+  DELETE_ENTRY,
+  Entry
 } from './types'
 
-const initialState: EntriesState = {}
+import { Map, fromJS } from 'immutable'
+
+const initialState: EntriesState = Map<string, Entry>()
 
 export default function entriesReducer (
   state = initialState,
@@ -13,14 +16,10 @@ export default function entriesReducer (
 ): EntriesState {
   switch (action.type) {
     case ADD_ENTRY:
-      return {
-        ...state,
-        [action.payload.id]: action.payload.entry
-      }
+      return state.set(action.payload.id, fromJS(action.payload.entry))
 
     case DELETE_ENTRY:
-      const { [action.payload.id]: deleted, ...rest } = state
-      return { ...rest }
+      return state.delete(action.payload.id)
 
     default:
       return state
